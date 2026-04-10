@@ -1,0 +1,27 @@
+instant.schema.ts
+  1dbededf3060ea1f 16-19,39-61
+app/index.tsx
+  1dbededf3060ea1f 2,16-21,55,61-65,67-71,75-154,164,167,170-172,176-188,190-229,231-232,234,236-373,376-452,458,460,465-491,685-714
+instant.perms.ts
+  1dbededf3060ea1f 6-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "3895d77e829b8cddae7bac7becd9f8d86d8174f5",
+  "prompts": {
+    "1dbededf3060ea1f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "908f29ef-c2bf-47e6-ac6c-807d14e2ed58",
+        "model": "gpt-5.4-medium"
+      },
+      "human_author": "Felix Dolderer",
+      "messages": [],
+      "total_additions": 505,
+      "total_deletions": 111,
+      "accepted_lines": 493,
+      "overriden_lines": 0
+    }
+  }
+}
