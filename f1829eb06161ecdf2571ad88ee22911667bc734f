@@ -1,0 +1,21 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "f1829eb06161ecdf2571ad88ee22911667bc734f",
+  "prompts": {
+    "8adee3d249915f56": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "6de68d65-862a-445d-8c44-fe27ef0920c9",
+        "model": "gpt-5.4-medium"
+      },
+      "human_author": "Felix Dolderer",
+      "messages": [],
+      "total_additions": 17,
+      "total_deletions": 8,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    }
+  }
+}
