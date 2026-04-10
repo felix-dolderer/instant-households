@@ -3,27 +3,34 @@
 import type { InstantRules } from "@instantdb/react-native";
 
 const rules = {
-  /**
-  "$default": {
-    "allow": {
-      "$default": "false"
-    }
-  }
-   * Welcome to Instant's permission system!
-   * Right now your rules are empty. To start filling them in, check out the docs:
-   * https://www.instantdb.com/docs/permissions
-   *
-   * Here's an example to give you a feel:
-   * posts: {
-   *   allow: {
-   *     view: "true",
-   *     create: "isOwner",
-   *     update: "isOwner",
-   *     delete: "isOwner",
-   *   },
-   *   bind: ["isOwner", "auth.id != null && auth.id == data.ownerId"],
-   * },
-   */
+  $default: {
+    allow: {
+      $default: "false",
+    },
+  },
+  $users: {
+    allow: {
+      view: "auth.id == data.id",
+      create: "true",
+      update: "auth.id == data.id",
+    },
+  },
+  households: {
+    allow: {
+      view: "auth.id in data.ref('users.id') || ruleParams.householdCode == data.code",
+      create: "auth.id != null",
+      update: "auth.id in data.ref('users.id') || (ruleParams.householdCode == data.code && size(request.modifiedFields) == 0)",
+      delete: "auth.id in data.ref('users.id')",
+    },
+  },
+  colors: {
+    allow: {
+      view: "auth.id in data.ref('household.users.id')",
+      create: "auth.id in data.ref('household.users.id')",
+      update: "auth.id in data.ref('household.users.id')",
+      delete: "auth.id in data.ref('household.users.id')",
+    },
+  },
 } satisfies InstantRules;
 
 export default rules;
