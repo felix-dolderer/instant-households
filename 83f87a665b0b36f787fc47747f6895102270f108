@@ -1,0 +1,23 @@
+instant.perms.ts
+  8adee3d249915f56 20-23,25-29,34-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "83f87a665b0b36f787fc47747f6895102270f108",
+  "prompts": {
+    "8adee3d249915f56": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "6de68d65-862a-445d-8c44-fe27ef0920c9",
+        "model": "gpt-5.4-medium"
+      },
+      "human_author": "Felix Dolderer",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    }
+  }
+}
