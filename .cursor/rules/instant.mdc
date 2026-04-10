@@ -16,14 +16,11 @@ Instant is a client-side database (Modern Firebase) with built-in queries, trans
 
 Instant provides client-side JS SDKs and an admin SDK:
 
-- `@instantdb/core` --- vanilla JS
-- `@instantdb/react` --- React
 - `@instantdb/react-native` --- React Native / Expo
 - `@instantdb/admin` --- backend scripts / servers
 
 When installing, always check what package manager the project uses (npm, pnpm,
-bun) first and then install the latest version of the Instant SDK. If working in
-React use Next and Tailwind unless specified otherwise.
+bun) first and then install the latest version of the Instant SDK.
 
 # Managing Instant Apps
 
@@ -79,8 +76,6 @@ npx instant-cli push perms --yes
 ```
 
 # CRITICAL Query Guidelines
-
-CRITICAL: When using React make sure to follow the rules of hooks. Remember, you can't have hooks show up conditionally.
 
 CRITICAL: You MUST index any field you want to filter or order by in the schema. If you do not, you will get an error when you try to filter or order by it.
 
@@ -228,7 +223,7 @@ Always pass `schema` when initializing Instant to get type safety for queries an
 import schema from '@/instant.schema`
 
 // On client
-import { init } from '@instantdb/react'; // or your relevant Instant SDK
+import { init } from '@instantdb/react-native'; // or your relevant Instant SDK
 const clientDb = init({ appId, schema });
 
 // On backend
@@ -241,7 +236,7 @@ const adminDb = init({ appId, adminToken, schema });
 Always use `id()` to generate ids for new entities
 
 ```tsx
-import { id } from '@instantdb/react'; // or your relevant Instant SDK
+import { id } from '@instantdb/react-native'; // or your relevant Instant SDK
 import { clientDb } from '@/lib/clientDb
 clientDb.transact(clientDb.tx.todos[id()].create({ title: 'New Todo' }));
 ```
@@ -266,23 +261,13 @@ type PostsWithProfile = InstaQLEntity<
 ```tsx
 import { clientDb } from '@/lib/clientDb';
 
-// For react/react-native apps use db.useAuth
+// Use db.useAuth
 function App() {
   const { isLoading, user, error } = clientDb.useAuth();
   if (isLoading) { return null; }
   if (error) { return <Error message={error.message /}></div>; }
   if (user) { return <Main />; }
   return <Login />;
-}
-
-// For vanilla JS apps use db.subscribeAuth
-function App() {
-  renderLoading();
-  db.subscribeAuth((auth) => {
-    if (auth.error) { renderAuthError(auth.error.message); }
-    else if (auth.user) { renderLoggedInPage(auth.user); }
-    else { renderSignInPage(); }
-  });
 }
 ```
 
@@ -423,10 +408,6 @@ Fetch the URL for a topic to learn more about it.
 - [Streams](https://instantdb.com/docs/streams.md): How to use streams with Instant.
 - [Stripe Payments](https://instantdb.com/docs/stripe-payments.md): How to integrate Stripe payments with Instant.
 - [React Native](https://instantdb.com/docs/start-rn.md): How to use Instant in React Native apps.
-- [Vanilla JS](https://instantdb.com/docs/start-vanilla.md): How to use Instant in vanilla JS apps.
-- [SolidJS](https://instantdb.com/docs/start-solidjs.md): How to use Instant in SolidJS apps.
-- [Svelte](https://instantdb.com/docs/start-svelte.md): How to use Instant in Svelte apps.
-- [TanStack](https://instantdb.com/docs/start-tanstack.md): How to use Instant in TanStack apps.
 
 # Final Note
 
