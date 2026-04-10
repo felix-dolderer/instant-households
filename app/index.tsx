@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   Text,
   TextInput,
   View,
@@ -158,99 +159,104 @@ function HouseholdHome({
       className="flex-1"
       style={{ backgroundColor: selectedColor }}
     >
-      <View className="flex-1 justify-between px-6 py-8">
-        <View className="gap-3">
-          <Text className="font-mono text-xs uppercase tracking-[3px] text-black/55">
-            Household active
-          </Text>
-          <Text className="text-4xl font-black leading-tight text-slate-950">
-            {household.name}
-          </Text>
-          <Text className="max-w-sm text-base leading-6 text-slate-900/75">
-            Signed in as {userEmail ?? "your account"}. Everyone in this
-            household sees the same shared color, while other households keep
-            their own separate state.
-          </Text>
-        </View>
-
-        <View className="gap-4">
-          <View className="rounded-[32px] border border-black/10 bg-black/10 p-5">
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 32 }}
+      >
+        <View className="gap-8">
+          <View className="gap-3">
             <Text className="font-mono text-xs uppercase tracking-[3px] text-black/55">
-              Invite code
+              Household active
             </Text>
-            <Text className="mt-3 text-3xl font-black tracking-[4px] text-slate-950">
-              {household.code}
+            <Text className="text-4xl font-black leading-tight text-slate-950">
+              {household.name}
             </Text>
-            <Text className="mt-2 text-sm leading-6 text-slate-900/75">
-              Share this code with another signed-in user so they can join this
-              same household and access the shared preferences.
+            <Text className="max-w-sm text-base leading-6 text-slate-900/75">
+              Signed in as {userEmail ?? "your account"}. Everyone in this
+              household sees the same shared color, while other households keep
+              their own separate state.
             </Text>
           </View>
 
-          <View className="rounded-[32px] border border-black/10 bg-white/80 p-6 shadow-2xl">
-            <Text className="font-mono text-xs uppercase tracking-[3px] text-slate-500">
-              Shared preference
-            </Text>
-            <Text className="mt-3 text-3xl font-bold text-slate-950">
-              Choose the room tone
-            </Text>
-            <Text className="mt-2 text-base leading-6 text-slate-600">
-              The current selection is synced through Instant and updates the
-              household backdrop in real time for every member.
-            </Text>
-
-            <View className="mt-6 gap-3">
-              {paletteOptions.map((color) => {
-                const active = color.value === selectedColor;
-
-                return (
-                  <Pressable
-                    key={color.value}
-                    onPress={() => {
-                      void setHouseholdColor(color.value);
-                    }}
-                    className="flex-row items-center justify-between rounded-[22px] border px-4 py-4"
-                    style={{
-                      backgroundColor: active ? "rgba(15, 23, 42, 0.92)" : "#fff",
-                      borderColor: active ? "rgba(15, 23, 42, 0.92)" : "#E7E5E4",
-                    }}
-                  >
-                    <View className="flex-row items-center gap-3">
-                      <View
-                        className="h-4 w-4 rounded-full"
-                        style={{ backgroundColor: color.value }}
-                      />
-                      <Text
-                        className="text-base font-semibold"
-                        style={{ color: active ? "#F8FAFC" : "#0F172A" }}
-                      >
-                        {color.label}
-                      </Text>
-                    </View>
-                    <Text
-                      className="font-mono text-xs uppercase tracking-[2px]"
-                      style={{ color: active ? "#CBD5E1" : "#64748B" }}
-                    >
-                      {active ? "Selected" : "Set"}
-                    </Text>
-                  </Pressable>
-                );
-              })}
+          <View className="gap-4">
+            <View className="rounded-[32px] border border-black/10 bg-black/10 p-5">
+              <Text className="font-mono text-xs uppercase tracking-[3px] text-black/55">
+                Invite code
+              </Text>
+              <Text className="mt-3 text-3xl font-black tracking-[4px] text-slate-950">
+                {household.code}
+              </Text>
+              <Text className="mt-2 text-sm leading-6 text-slate-900/75">
+                Share this code with another signed-in user so they can join this
+                same household and access the shared preferences.
+              </Text>
             </View>
 
-            <Pressable
-              onPress={() => {
-                db.auth.signOut();
-              }}
-              className="mt-6 rounded-full border border-slate-300 px-4 py-3"
-            >
-              <Text className="text-center font-semibold text-slate-800">
-                Sign out
+            <View className="rounded-[32px] border border-black/10 bg-white/80 p-6 shadow-2xl">
+              <Text className="font-mono text-xs uppercase tracking-[3px] text-slate-500">
+                Shared preference
               </Text>
-            </Pressable>
+              <Text className="mt-3 text-3xl font-bold text-slate-950">
+                Choose the room tone
+              </Text>
+              <Text className="mt-2 text-base leading-6 text-slate-600">
+                The current selection is synced through Instant and updates the
+                household backdrop in real time for every member.
+              </Text>
+
+              <View className="mt-6 gap-3">
+                {paletteOptions.map((color) => {
+                  const active = color.value === selectedColor;
+
+                  return (
+                    <Pressable
+                      key={color.value}
+                      onPress={() => {
+                        void setHouseholdColor(color.value);
+                      }}
+                      className="flex-row items-center justify-between rounded-[22px] border px-4 py-4"
+                      style={{
+                        backgroundColor: active ? "rgba(15, 23, 42, 0.92)" : "#fff",
+                        borderColor: active ? "rgba(15, 23, 42, 0.92)" : "#E7E5E4",
+                      }}
+                    >
+                      <View className="flex-row items-center gap-3">
+                        <View
+                          className="h-4 w-4 rounded-full"
+                          style={{ backgroundColor: color.value }}
+                        />
+                        <Text
+                          className="text-base font-semibold"
+                          style={{ color: active ? "#F8FAFC" : "#0F172A" }}
+                        >
+                          {color.label}
+                        </Text>
+                      </View>
+                      <Text
+                        className="font-mono text-xs uppercase tracking-[2px]"
+                        style={{ color: active ? "#CBD5E1" : "#64748B" }}
+                      >
+                        {active ? "Selected" : "Set"}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+
+              <Pressable
+                onPress={() => {
+                  db.auth.signOut();
+                }}
+                className="mt-6 rounded-full border border-slate-300 px-4 py-3"
+              >
+                <Text className="text-center font-semibold text-slate-800">
+                  Sign out
+                </Text>
+              </Pressable>
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -654,9 +660,15 @@ function ScreenShell({ children }: Readonly<{ children: React.ReactNode }>) {
         <View className="absolute -left-16 top-8 h-56 w-56 rounded-full bg-amber-200/10" />
         <View className="absolute -right-20 top-28 h-72 w-72 rounded-full bg-indigo-400/10" />
         <View className="absolute bottom-0 left-8 h-64 w-64 rounded-full bg-emerald-300/10" />
-        <View className="flex-1 items-center justify-center px-6">
-          {children}
-        </View>
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View className="flex-1 items-center justify-center px-6 py-8">
+            {children}
+          </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
