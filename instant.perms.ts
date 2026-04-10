@@ -17,18 +17,27 @@ const rules = {
   },
   households: {
     allow: {
-      view: "auth.id in data.ref('users.id') || ruleParams.householdCode == data.code",
-      create: "auth.id != null",
-      update: "auth.id in data.ref('users.id') || (ruleParams.householdCode == data.code && size(request.modifiedFields) == 0)",
-      delete: "auth.id in data.ref('users.id')",
+      view: "isHouseholdUser || hasMatchingHouseholdCode",
+      create: "isSignedIn",
+      update: "isHouseholdUser || canLookupHouseholdByCode",
+      delete: "isHouseholdUser",
+    },
+    bind: {
+      isSignedIn: "auth.id != null",
+      isHouseholdUser: "auth.id in data.ref('users.id')",
+      hasMatchingHouseholdCode: "ruleParams.householdCode == data.code",
+      canLookupHouseholdByCode: "hasMatchingHouseholdCode && size(request.modifiedFields) == 0",
     },
   },
   colors: {
     allow: {
-      view: "auth.id in data.ref('household.users.id')",
-      create: "auth.id in data.ref('household.users.id')",
-      update: "auth.id in data.ref('household.users.id')",
-      delete: "auth.id in data.ref('household.users.id')",
+      view: "isHouseholdUser",
+      create: "isHouseholdUser",
+      update: "isHouseholdUser",
+      delete: "isHouseholdUser",
+    },
+    bind: {
+      isHouseholdUser: "auth.id in data.ref('household.users.id')",
     },
   },
 } satisfies InstantRules;
