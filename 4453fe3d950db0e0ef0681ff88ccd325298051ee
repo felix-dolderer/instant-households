@@ -1,0 +1,23 @@
+app/index.tsx
+  56cb1cd77b193162 2-13,18-19,22-29,32,35-44,48-49,52,55-61,63-71,74-76,78-276,278-279,281-332,335,339-356
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "4453fe3d950db0e0ef0681ff88ccd325298051ee",
+  "prompts": {
+    "56cb1cd77b193162": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "3179326b-1287-4b88-b2e7-7d900234901d",
+        "model": "gpt-5.4-medium"
+      },
+      "human_author": "Felix Dolderer",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 332,
+      "overriden_lines": 0
+    }
+  }
+}
