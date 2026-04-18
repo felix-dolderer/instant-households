@@ -1,0 +1,12 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "74dc96b945c7be9ace3e6701d9c6c211d7243bf4",
+  "prompts": {},
+  "humans": {
+    "h_d29771d61aacbf": {
+      "author": "Felix Dolderer"
+    }
+  }
+}
