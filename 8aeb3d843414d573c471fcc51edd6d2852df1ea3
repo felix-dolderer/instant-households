@@ -1,0 +1,25 @@
+eslint.config.js
+  c40e614f9ad7f18e 8-15
+app/index.tsx
+  c40e614f9ad7f18e 131
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "8aeb3d843414d573c471fcc51edd6d2852df1ea3",
+  "prompts": {
+    "c40e614f9ad7f18e": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "5b59dbd5-5369-44d6-9dbe-3304783d84a0",
+        "model": "composer-2-fast"
+      },
+      "human_author": "Felix Dolderer",
+      "messages": [],
+      "total_additions": 10,
+      "total_deletions": 1,
+      "accepted_lines": 10,
+      "overriden_lines": 0
+    }
+  }
+}
