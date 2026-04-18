@@ -1,6 +1,6 @@
 // Docs: https://www.instantdb.com/docs/modeling-data
 
-import { i } from "@instantdb/react-native";
+import { i } from '@instantdb/react-native'
 
 const _schema = i.schema({
   entities: {
@@ -25,49 +25,49 @@ const _schema = i.schema({
   links: {
     $usersLinkedPrimaryUser: {
       forward: {
-        on: "$users",
-        has: "one",
-        label: "linkedPrimaryUser",
-        onDelete: "cascade",
+        on: '$users',
+        has: 'one',
+        label: 'linkedPrimaryUser',
+        onDelete: 'cascade',
       },
       reverse: {
-        on: "$users",
-        has: "many",
-        label: "linkedGuestUsers",
+        on: '$users',
+        has: 'many',
+        label: 'linkedGuestUsers',
       },
     },
     householdMembers: {
       forward: {
-        on: "$users",
-        has: "one",
-        label: "household",
+        on: '$users',
+        has: 'one',
+        label: 'household',
       },
       reverse: {
-        on: "households",
-        has: "many",
-        label: "users",
+        on: 'households',
+        has: 'many',
+        label: 'users',
       },
     },
     householdColors: {
       forward: {
-        on: "colors",
-        has: "one",
-        label: "household",
-        onDelete: "cascade",
+        on: 'colors',
+        has: 'one',
+        label: 'household',
+        onDelete: 'cascade',
       },
       reverse: {
-        on: "households",
-        has: "many",
-        label: "colors",
+        on: 'households',
+        has: 'many',
+        label: 'colors',
       },
     },
   },
-});
+})
 
 // This helps TypeScript display nicer intellisense
-type _AppSchema = typeof _schema;
+type _AppSchema = typeof _schema
 interface AppSchema extends _AppSchema {}
-const schema: AppSchema = _schema;
+const schema: AppSchema = _schema
 
-export type { AppSchema };
-export default schema;
+export type { AppSchema }
+export default schema

@@ -1,45 +1,45 @@
 // Docs: https://www.instantdb.com/docs/permissions
 
-import type { InstantRules } from "@instantdb/react-native";
+import type { InstantRules } from '@instantdb/react-native'
 
 const rules = {
   $default: {
     allow: {
-      $default: "false",
+      $default: 'false',
     },
   },
   $users: {
     allow: {
-      view: "auth.id == data.id",
-      create: "true",
-      update: "auth.id == data.id",
+      view: 'auth.id == data.id',
+      create: 'true',
+      update: 'auth.id == data.id',
     },
   },
   households: {
     allow: {
-      view: "isHouseholdUser || hasMatchingHouseholdCode",
-      create: "isSignedIn",
-      update: "isHouseholdUser || canLookupHouseholdByCode",
-      delete: "isHouseholdUser",
+      view: 'isHouseholdUser || hasMatchingHouseholdCode',
+      create: 'isSignedIn',
+      update: 'isHouseholdUser || canLookupHouseholdByCode',
+      delete: 'isHouseholdUser',
     },
     bind: {
-      isSignedIn: "auth.id != null",
+      isSignedIn: 'auth.id != null',
       isHouseholdUser: "auth.id in data.ref('users.id')",
-      hasMatchingHouseholdCode: "ruleParams.householdCode == data.code",
-      canLookupHouseholdByCode: "hasMatchingHouseholdCode && size(request.modifiedFields) == 0",
+      hasMatchingHouseholdCode: 'ruleParams.householdCode == data.code',
+      canLookupHouseholdByCode: 'hasMatchingHouseholdCode && size(request.modifiedFields) == 0',
     },
   },
   colors: {
     allow: {
-      view: "isHouseholdUser",
-      create: "isHouseholdUser",
-      update: "isHouseholdUser",
-      delete: "isHouseholdUser",
+      view: 'isHouseholdUser',
+      create: 'isHouseholdUser',
+      update: 'isHouseholdUser',
+      delete: 'isHouseholdUser',
     },
     bind: {
       isHouseholdUser: "auth.id in data.ref('household.users.id')",
     },
   },
-} satisfies InstantRules;
+} satisfies InstantRules
 
-export default rules;
+export default rules
