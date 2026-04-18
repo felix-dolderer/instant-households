@@ -128,7 +128,7 @@ function HouseholdHome({
     id: string;
     name: string;
     code: string;
-    colors?: Array<{ id: string; value: string }>;
+    colors?: { id: string; value: string }[];
   };
   userEmail?: string | null;
 }>) {
