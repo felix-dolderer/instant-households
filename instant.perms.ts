@@ -15,29 +15,30 @@ const rules = {
       update: 'auth.id == data.id',
     },
   },
-  households: {
+  organizations: {
     allow: {
-      view: 'isHouseholdUser || hasMatchingHouseholdCode',
+      view: 'isOrganizationMember || hasMatchingOrganizationCode',
       create: 'isSignedIn',
-      update: 'isHouseholdUser || canLookupHouseholdByCode',
-      delete: 'isHouseholdUser',
+      update: 'isOrganizationMember || canLookupOrganizationByCode',
+      delete: 'isOrganizationMember',
     },
     bind: {
       isSignedIn: 'auth.id != null',
-      isHouseholdUser: "auth.id in data.ref('users.id')",
-      hasMatchingHouseholdCode: 'ruleParams.householdCode == data.code',
-      canLookupHouseholdByCode: 'hasMatchingHouseholdCode && size(request.modifiedFields) == 0',
+      isOrganizationMember: "auth.id in data.ref('users.id')",
+      hasMatchingOrganizationCode: 'ruleParams.organizationCode == data.code',
+      canLookupOrganizationByCode:
+        'hasMatchingOrganizationCode && size(request.modifiedFields) == 0',
     },
   },
   colors: {
     allow: {
-      view: 'isHouseholdUser',
-      create: 'isHouseholdUser',
-      update: 'isHouseholdUser',
-      delete: 'isHouseholdUser',
+      view: 'isOrganizationMember',
+      create: 'isOrganizationMember',
+      update: 'isOrganizationMember',
+      delete: 'isOrganizationMember',
     },
     bind: {
-      isHouseholdUser: "auth.id in data.ref('household.users.id')",
+      isOrganizationMember: "auth.id in data.ref('organization.users.id')",
     },
   },
 } satisfies InstantRules

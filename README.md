@@ -1,10 +1,10 @@
-# Households
+# Organizations
 
-`households` is an Expo + React Native app backed by InstantDB. Right now it covers a small shared-state flow:
+`organizations` is an Expo + React Native app backed by InstantDB. Right now it covers a small shared-state flow:
 
 - sign in with Instant magic-code auth
-- create a household or join one with an invite code
-- sync a shared household color preference in real time
+- create an organization or join one with an invite code
+- sync a shared organization color preference in real time
 
 ## Run It
 
@@ -37,14 +37,28 @@ bun run lint
 The app currently uses:
 
 - `$users`
-- `households`
+- `organizations`
 - `colors`
 
-Users belong to a household, and each household has a shared color record that updates the UI for everyone in that household.
+Users belong to an organization, and each organization has a shared color record that updates the UI for everyone in that organization.
+
+## Migrating an existing Instant app (from “households”)
+
+If this codebase previously used `households`, `householdMembers`, and `householdColors`, push schema renames before relying on the new names (see [Instant CLI — renames](https://instantdb.com/docs/cli.md)). Example (adjust to match your prior names):
+
+```bash
+npx instant-cli push schema --rename 'households:organizations householdMembers:organizationMembers householdColors:organizationColors' --yes
+```
+
+Then push permissions:
+
+```bash
+npx instant-cli push perms --yes
+```
 
 ## Notes
 
 - This repo uses Expo Router as the app entrypoint.
 - This project uses Bun as its package manager and script runner.
 - The current experience is centered in `app/index.tsx`; there are not many screens yet.
-- Permissions allow signed-in users to create households, join by household code, and read or update colors only for their own household.
+- Permissions allow signed-in users to create organizations, join by organization code, and read or update colors only for their own organization.

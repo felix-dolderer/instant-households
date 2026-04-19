@@ -65,13 +65,13 @@ function AuthenticatedApp({
   const { isLoading, error, data } = db.useQuery({
     $users: {
       $: { where: { id: user.id } },
-      household: {
+      organization: {
         colors: {},
       },
     },
   })
 
-  const household = data?.$users[0]?.household ?? null
+  const organization = data?.$users[0]?.organization ?? null
 
   if (isLoading) {
     return (
@@ -79,7 +79,7 @@ function AuthenticatedApp({
         <View className="items-center gap-4">
           <ActivityIndicator size="large" color="#F4EEE7" />
           <Text className="font-mono text-sm uppercase tracking-[3px] text-stone-300">
-            Loading your household
+            Loading your organization
           </Text>
         </View>
       </ScreenShell>
@@ -91,7 +91,7 @@ function AuthenticatedApp({
       <ScreenShell>
         <View className="w-full max-w-md rounded-[28px] border border-red-300/20 bg-red-950/60 p-6">
           <Text className="font-mono text-xs uppercase tracking-[3px] text-red-200">
-            Household sync error
+            Organization sync error
           </Text>
           <Text className="mt-3 text-base leading-6 text-red-50">{error.message}</Text>
           <Pressable
@@ -107,18 +107,18 @@ function AuthenticatedApp({
     )
   }
 
-  if (!household) {
-    return <HouseholdSetupScreen user={user} />
+  if (!organization) {
+    return <OrganizationSetupScreen user={user} />
   }
 
-  return <HouseholdHome household={household} userEmail={user.email} />
+  return <OrganizationHome organization={organization} userEmail={user.email} />
 }
 
-function HouseholdHome({
-  household,
+function OrganizationHome({
+  organization,
   userEmail,
 }: Readonly<{
-  household: {
+  organization: {
     id: string
     name: string
     code: string
@@ -126,11 +126,11 @@ function HouseholdHome({
   }
   userEmail?: string | null
 }>) {
-  const selectedColor = household.colors?.[0]?.value ?? DEFAULT_COLOR
-  const colorRecord = household.colors?.[0]
+  const selectedColor = organization.colors?.[0]?.value ?? DEFAULT_COLOR
+  const colorRecord = organization.colors?.[0]
   const paletteOptions = useMemo(() => palette, [])
 
-  const setHouseholdColor = async (value: string) => {
+  const setOrganizationColor = async (value: string) => {
     try {
       if (colorRecord) {
         await db.transact(db.tx.colors[colorRecord.id].update({ value }))
@@ -138,7 +138,7 @@ function HouseholdHome({
       }
 
       const colorId = id()
-      await db.transact(db.tx.colors[colorId].create({ value }).link({ household: household.id }))
+      await db.transact(db.tx.colors[colorId].create({ value }).link({ organization: organization.id }))
     } catch (error) {
       Alert.alert('Unable to update color', getErrorMessage(error))
     }
@@ -153,14 +153,14 @@ function HouseholdHome({
         <View className="gap-8">
           <View className="gap-3">
             <Text className="font-mono text-xs uppercase tracking-[3px] text-black/55">
-              Household active
+              Organization active
             </Text>
             <Text className="text-4xl font-black leading-tight text-slate-950">
-              {household.name}
+              {organization.name}
             </Text>
             <Text className="max-w-sm text-base leading-6 text-slate-900/75">
-              Signed in as {userEmail ?? 'your account'}. Everyone in this household sees the same
-              shared color, while other households keep their own separate state.
+              Signed in as {userEmail ?? 'your account'}. Everyone in this organization sees the same
+              shared color, while other organizations keep their own separate state.
             </Text>
           </View>
 
@@ -170,10 +170,10 @@ function HouseholdHome({
                 Invite code
               </Text>
               <Text className="mt-3 text-3xl font-black tracking-[4px] text-slate-950">
-                {household.code}
+                {organization.code}
               </Text>
               <Text className="mt-2 text-sm leading-6 text-slate-900/75">
-                Share this code with another signed-in user so they can join this same household and
+                Share this code with another signed-in user so they can join this same organization and
                 access the shared preferences.
               </Text>
             </View>
@@ -184,7 +184,7 @@ function HouseholdHome({
               </Text>
               <Text className="mt-3 text-3xl font-bold text-slate-950">Choose the room tone</Text>
               <Text className="mt-2 text-base leading-6 text-slate-600">
-                The current selection is synced through Instant and updates the household backdrop
+                The current selection is synced through Instant and updates the organization backdrop
                 in real time for every member.
               </Text>
 
@@ -196,7 +196,7 @@ function HouseholdHome({
                     <Pressable
                       key={color.value}
                       onPress={() => {
-                        void setHouseholdColor(color.value)
+                        void setOrganizationColor(color.value)
                       }}
                       className="flex-row items-center justify-between rounded-[22px] border px-4 py-4"
                       style={{
@@ -243,45 +243,45 @@ function HouseholdHome({
   )
 }
 
-function HouseholdSetupScreen({
+function OrganizationSetupScreen({
   user,
 }: Readonly<{
   user: NonNullable<ReturnType<typeof db.useAuth>['user']>
 }>) {
   const [mode, setMode] = useState<'join' | 'create'>('join')
   const [joinCode, setJoinCode] = useState('')
-  const [householdName, setHouseholdName] = useState('')
+  const [organizationName, setOrganizationName] = useState('')
   const [isJoining, setIsJoining] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
 
-  const normalizedCode = normalizeHouseholdCode(joinCode)
+  const normalizedCode = normalizeOrganizationCode(joinCode)
 
-  const createHousehold = async () => {
+  const createOrganization = async () => {
     setIsCreating(true)
 
     try {
-      const householdId = id()
+      const organizationId = id()
       const colorId = id()
 
       await db.transact([
-        db.tx.households[householdId]
+        db.tx.organizations[organizationId]
           .create({
-            name: buildHouseholdName(user.email, householdName),
-            code: generateHouseholdCode(),
+            name: buildOrganizationName(user.email, organizationName),
+            code: generateOrganizationCode(),
           })
           .link({ users: user.id }),
-        db.tx.colors[colorId].create({ value: DEFAULT_COLOR }).link({ household: householdId }),
+        db.tx.colors[colorId].create({ value: DEFAULT_COLOR }).link({ organization: organizationId }),
       ])
     } catch (error) {
-      Alert.alert('Unable to create household', getErrorMessage(error))
+      Alert.alert('Unable to create organization', getErrorMessage(error))
     } finally {
       setIsCreating(false)
     }
   }
 
-  const joinHousehold = async () => {
+  const joinOrganization = async () => {
     if (!normalizedCode) {
-      Alert.alert('Code required', 'Enter the household code to join.')
+      Alert.alert('Code required', 'Enter the organization code to join.')
       return
     }
 
@@ -290,7 +290,7 @@ function HouseholdSetupScreen({
     try {
       const { data } = await db.queryOnce(
         {
-          households: {
+          organizations: {
             $: {
               where: {
                 code: normalizedCode,
@@ -300,25 +300,25 @@ function HouseholdSetupScreen({
         },
         {
           ruleParams: {
-            householdCode: normalizedCode,
+            organizationCode: normalizedCode,
           },
         },
       )
 
-      const household = data.households[0]
+      const organization = data.organizations[0]
 
-      if (!household) {
-        Alert.alert('Household not found', 'That code does not match an existing household yet.')
+      if (!organization) {
+        Alert.alert('Organization not found', 'That code does not match an existing organization yet.')
         return
       }
 
       await db.transact(
-        db.tx.households[household.id]
-          .ruleParams({ householdCode: normalizedCode })
+        db.tx.organizations[organization.id]
+          .ruleParams({ organizationCode: normalizedCode })
           .link({ users: user.id }),
       )
     } catch (error) {
-      Alert.alert('Unable to join household', getErrorMessage(error))
+      Alert.alert('Unable to join organization', getErrorMessage(error))
     } finally {
       setIsJoining(false)
     }
@@ -332,13 +332,13 @@ function HouseholdSetupScreen({
       >
         <View className="w-full max-w-md self-center overflow-hidden rounded-[36px] border border-white/10 bg-slate-950/90 p-6 shadow-2xl">
           <Text className="font-mono text-xs uppercase tracking-[3px] text-stone-300">
-            Household access
+            Organization access
           </Text>
           <Text className="mt-4 text-4xl font-black leading-tight text-stone-50">
             Choose or join your shared space.
           </Text>
           <Text className="mt-3 text-base leading-6 text-stone-300">
-            You are signed in as {user.email ?? 'your account'}, but you still need a household
+            You are signed in as {user.email ?? 'your account'}, but you still need an organization
             before shared preferences and storage become available.
           </Text>
 
@@ -349,7 +349,7 @@ function HouseholdSetupScreen({
               onPress={() => setMode('join')}
             />
             <ModeButton
-              label="Create household"
+              label="Create organization"
               active={mode === 'create'}
               onPress={() => setMode('create')}
             />
@@ -359,7 +359,7 @@ function HouseholdSetupScreen({
             <View className="mt-8 gap-4">
               <View className="rounded-[24px] border border-white/10 bg-white/5 px-4 py-3">
                 <Text className="mb-2 font-mono text-xs uppercase tracking-[2px] text-stone-400">
-                  Household code
+                  Organization code
                 </Text>
                 <TextInput
                   value={joinCode}
@@ -374,22 +374,22 @@ function HouseholdSetupScreen({
 
               <View className="rounded-[24px] border border-amber-300/15 bg-amber-300/10 px-4 py-3">
                 <Text className="font-mono text-xs uppercase tracking-[2px] text-amber-100">
-                  Shared household
+                  Shared organization
                 </Text>
                 <Text className="mt-2 text-sm leading-6 text-amber-50/85">
-                  Joining a household connects you to its shared data and synced preferences
+                  Joining an organization connects you to its shared data and synced preferences
                   instantly.
                 </Text>
               </View>
 
               <Pressable
-                onPress={joinHousehold}
+                onPress={joinOrganization}
                 disabled={isJoining}
                 className="rounded-full px-5 py-4"
                 style={{ backgroundColor: isJoining ? '#57534E' : '#F4EEE7' }}
               >
                 <Text className="text-center text-base font-bold text-slate-950">
-                  {isJoining ? 'Joining...' : 'Join household'}
+                  {isJoining ? 'Joining...' : 'Join organization'}
                 </Text>
               </Pressable>
             </View>
@@ -397,11 +397,11 @@ function HouseholdSetupScreen({
             <View className="mt-8 gap-4">
               <View className="rounded-[24px] border border-white/10 bg-white/5 px-4 py-3">
                 <Text className="mb-2 font-mono text-xs uppercase tracking-[2px] text-stone-400">
-                  Household name
+                  Organization name
                 </Text>
                 <TextInput
-                  value={householdName}
-                  onChangeText={setHouseholdName}
+                  value={organizationName}
+                  onChangeText={setOrganizationName}
                   autoCapitalize="words"
                   autoCorrect={false}
                   placeholder="Sunday Flat"
@@ -412,22 +412,22 @@ function HouseholdSetupScreen({
 
               <View className="rounded-[24px] border border-emerald-300/15 bg-emerald-300/10 px-4 py-3">
                 <Text className="font-mono text-xs uppercase tracking-[2px] text-emerald-100">
-                  New household
+                  New organization
                 </Text>
                 <Text className="mt-2 text-sm leading-6 text-emerald-50/85">
-                  We will create a fresh household, seed its shared color preference, and generate a
+                  We will create a fresh organization, seed its shared color preference, and generate a
                   code you can share with others.
                 </Text>
               </View>
 
               <Pressable
-                onPress={createHousehold}
+                onPress={createOrganization}
                 disabled={isCreating}
                 className="rounded-full px-5 py-4"
                 style={{ backgroundColor: isCreating ? '#57534E' : '#F4EEE7' }}
               >
                 <Text className="text-center text-base font-bold text-slate-950">
-                  {isCreating ? 'Creating...' : 'Create household'}
+                  {isCreating ? 'Creating...' : 'Create organization'}
                 </Text>
               </Pressable>
             </View>
@@ -529,7 +529,7 @@ function LoginScreen() {
       >
         <View className="w-full max-w-md self-center overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/85 p-6 shadow-2xl">
           <Text className="font-mono text-xs uppercase tracking-[3px] text-stone-300">
-            Households
+            Organizations
           </Text>
           <Text className="mt-4 text-4xl font-black leading-tight text-stone-50">
             Enter with a magic code.
@@ -666,7 +666,7 @@ function getErrorMessage(error: unknown) {
   return 'Please try again in a moment.'
 }
 
-function normalizeHouseholdCode(value: string) {
+function normalizeOrganizationCode(value: string) {
   return value
     .trim()
     .toUpperCase()
@@ -674,11 +674,11 @@ function normalizeHouseholdCode(value: string) {
     .slice(0, 8)
 }
 
-function generateHouseholdCode() {
+function generateOrganizationCode() {
   return id().replaceAll('-', '').slice(0, 8).toUpperCase()
 }
 
-function buildHouseholdName(email: string | undefined | null, input: string) {
+function buildOrganizationName(email: string | undefined | null, input: string) {
   const trimmed = input.trim()
 
   if (trimmed) {
@@ -688,10 +688,10 @@ function buildHouseholdName(email: string | undefined | null, input: string) {
   const localPart = email?.split('@')[0]?.trim()
 
   if (localPart) {
-    return `${capitalize(localPart)} household`
+    return `${capitalize(localPart)} organization`
   }
 
-  return 'New household'
+  return 'New organization'
 }
 
 function capitalize(value: string) {

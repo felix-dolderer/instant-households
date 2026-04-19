@@ -13,7 +13,7 @@ const _schema = i.schema({
       imageURL: i.string().optional(),
       type: i.string().optional(),
     }),
-    households: i.entity({
+    organizations: i.entity({
       name: i.string(),
       code: i.string().unique().indexed(),
     }),
@@ -36,27 +36,27 @@ const _schema = i.schema({
         label: 'linkedGuestUsers',
       },
     },
-    householdMembers: {
+    organizationMembers: {
       forward: {
         on: '$users',
         has: 'one',
-        label: 'household',
+        label: 'organization',
       },
       reverse: {
-        on: 'households',
+        on: 'organizations',
         has: 'many',
         label: 'users',
       },
     },
-    householdColors: {
+    organizationColors: {
       forward: {
         on: 'colors',
         has: 'one',
-        label: 'household',
+        label: 'organization',
         onDelete: 'cascade',
       },
       reverse: {
-        on: 'households',
+        on: 'organizations',
         has: 'many',
         label: 'colors',
       },
